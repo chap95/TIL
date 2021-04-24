@@ -1,9 +1,5 @@
 import { IInvoice, IPerformace, IPlays, PlayType } from "./rawCode";
 
-
-
-
-
 function statement(invoice: IInvoice, plays: IPlays) {
   let totalAmount = 0;
   let volumeCredits = 0;
