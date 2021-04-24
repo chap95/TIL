@@ -47,18 +47,17 @@ function statement(invoice: IInvoice, plays: IPlays) {
 
   for (let perf of invoice.preformances) {
    // const play: IPlays = plays[perf.playID];  play 라는 변수를 playFor 함수로 인라인 시켰다. 임시 변수 사용을 최소화 하기 위해
-    let thisAmount = amountFor(perf); // play 인자를 제거 함수 내부에서 play를 결정
 
     volumeCredits += Math.max(perf.audiance - 30, 0);
     if (playFor(perf).type === PlayType.COMEDY) {
       volumeCredits += Math.floor(perf.audiance / 5);
     }
 
-    result += ` ${playFor(perf).name}: ${format(thisAmount / 100)} (${
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf) / 100)} (${
       perf.audiance
     }석)\n`;
 
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf);
   }
 
   result += `총액: ${format(totalAmount)}\n`;

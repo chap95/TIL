@@ -35,18 +35,18 @@ function statement(invoice: IInvoice, plays: IPlays) {
 
   for (let perf of invoice.preformances) {
     const play: IPlays = plays[perf.playID];
-    let thisAmount = amountFor(perf, play); // 아래에 있던 switch case를 amountFor 함수로 추출
+    // let thisAmount = amountFor(perf, play);  아래에 있던 switch case를 amountFor 함수로 추출
 
     volumeCredits += Math.max(perf.audiance - 30, 0); //포인트 적립
     if (play.type === PlayType.COMEDY) {
       volumeCredits += Math.floor(perf.audiance / 5);
     }
 
-    result += ` ${play.name}: ${format(thisAmount / 100)} (${
+    result += ` ${play.name}: ${format(amountFor(perf, play) / 100)} (${
       perf.audiance
     }석)\n`;
 
-    totalAmount += thisAmount;
+    totalAmount += amountFor(perf, play);
   }
 
   result += `총액: ${format(totalAmount)}\n`;
