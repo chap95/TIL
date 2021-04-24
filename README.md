@@ -10,4 +10,4 @@
 
 * * *
    
-### [1. 함수 추출하기](https://github.com/chap95/TIL/blob/master/ExtractingFunction.md)
+### [1. 함수 추출하기](https://github.com/chap95/TIL/blob/master/amountFor.md)
