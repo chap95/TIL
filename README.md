@@ -7,7 +7,7 @@
 책에 나온 코드를 타입스크립트로 변경한 파일입니다. 참고해 주세요!   
    
 #### 각 파일은 리펙터링 과정을 담았습니다.   
-#TBU.  
+# TBU.  
 * * *
    
 ### [1. 함수 추출하기](https://github.com/chap95/TIL/blob/master/amountFor.md)   
