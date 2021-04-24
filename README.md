@@ -10,4 +10,5 @@
 
 * * *
    
-### [1. 함수 추출하기](https://github.com/chap95/TIL/blob/master/amountFor.md)
+### [1. 함수 추출하기](https://github.com/chap95/TIL/blob/master/amountFor.md)   
+### [2. 임시 변수를 질의 함수로 바꾸기]
