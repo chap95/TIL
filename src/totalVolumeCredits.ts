@@ -58,7 +58,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
 
 	// 5. totalVolumeCredits
 	function totalVolumeCredits() {
-		
+
 		let volumeCredits = 0;
 		for (let perf of invoice.preformances){
 			volumeCredits += volumeCreditsFor(perf);
