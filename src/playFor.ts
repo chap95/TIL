@@ -45,7 +45,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
     minimumFractionDigits: 2,
   }).format;
 
-  for (let perf of invoice.preformances) {
+  for (let perf of invoice.performances) {
    // const play: IPlays = plays[perf.playID];  play 라는 변수를 playFor 함수로 인라인 시켰다. 임시 변수 사용을 최소화 하기 위해
 
     volumeCredits += Math.max(perf.audiance - 30, 0);

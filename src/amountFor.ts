@@ -33,7 +33,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
 		return result
 	}
 
-  for (let perf of invoice.preformances) {
+  for (let perf of invoice.performances) {
     const play: IPlays = plays[perf.playID];
     // let thisAmount = amountFor(perf, play);  아래에 있던 switch case를 amountFor 함수로 추출
 

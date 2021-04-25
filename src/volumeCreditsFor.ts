@@ -61,7 +61,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
   let result = `청구 내역 (고객명 ${invoice.customer}\n`;
   
 
-  for (let perf of invoice.preformances) {
+  for (let perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf); // 추출한 함수를 이용해 값을 누적시킨다. 아래의 로직들을 추상화 시켜 코드가 깔끔해졌다. :)
 
     result += ` ${playFor(perf).name}: ${usd(amountFor(perf))} (${

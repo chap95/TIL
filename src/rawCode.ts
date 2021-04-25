@@ -17,7 +17,7 @@ export interface IPerformace {
 }
 
 export interface IInvoice {
-  preformances: IPerformace[];
+  performances: IPerformace[];
   customer: string;
 }
 
@@ -31,7 +31,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
     minimumFractionDigits: 2,
   }).format;
 
-  for (let perf of invoice.preformances) {
+  for (let perf of invoice.performances) {
     const play: IPlays = plays[perf.playID];
     let thisAmount = 0;
 
