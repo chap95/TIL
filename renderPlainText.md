@@ -13,3 +13,6 @@ interface로 타입을 정해줄 때 모든 속성을 optional로 처리를 했�
    
 key : value 스타일로 interface를 정의해주려 했으나 여러 타입이 들어올 수 있어서 타입을 정하는데에도 애매한 부분이 존재합니다.   
 * * *
+   
+### [코드](https://github.com/chap95/TIL/blob/master/src/anotherFunction/createStatementData.ts)   
+createStatementData 함수로 중첩함수들을 분리시키고 renderPlainText에 데이터를 가지고 텍스트를 반환하는 로직을 넣음
