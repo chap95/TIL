@@ -36,6 +36,8 @@ function statement(invoice: IInvoice, plays: IPlays) {
   function playFor(aPerformance: IPerformace) {
     return plays[aPerformance.playID];
   }
+	
+	
 
 	// 3. volumeCreditsFor
 	function volumeCreditsFor(aPerformance: IPerformace) {
@@ -46,6 +48,8 @@ function statement(invoice: IInvoice, plays: IPlays) {
 		}
 		return volumeCredits
 	}
+	
+	
 
 	// 4. format 
 	function usd(aNumber: number){
@@ -55,10 +59,12 @@ function statement(invoice: IInvoice, plays: IPlays) {
 			minimumFractionDigits: 2,
 		}).format(aNumber/100); // 함수 하단 부에 있는 format(thisAmount / 100) 부분도 함수 내부로 들어왔다.
 	}
+	
+	
 
 	// 5. totalVolumeCredits
 	function totalVolumeCredits() {
-		
+
 		let volumeCredits = 0;
 		for (let perf of invoice.performances){
 			volumeCredits += volumeCreditsFor(perf);
@@ -66,6 +72,8 @@ function statement(invoice: IInvoice, plays: IPlays) {
 
 		return volumeCredits
 	}
+	
+	
 
   let totalAmount = 0;
   let result = `청구 내역 (고객명 ${invoice.customer}\n`;
