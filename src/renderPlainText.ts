@@ -14,7 +14,6 @@ export interface INewPerformance extends IPerformace {
 	play?: IPlays;
 	amount?: number;
 	volumeCredits?: number;
-	
 }
 
 export interface INewInvoice {
