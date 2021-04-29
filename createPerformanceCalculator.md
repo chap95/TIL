@@ -28,3 +28,7 @@
 추신 ) 이 극장은 카테고리별로 값을 계산하는게 신기하다. 예시 코드지만 보면서 조금 이상하다 생각함 ㅋㅋ   
    
 * * *
+   
+### 관련코드   
+   
+[1. case 별 클래스와 인스턴스 생성](https://github.com/chap95/TIL/blob/master/src/anotherFunction/createPerformanceCalculator.ts)
