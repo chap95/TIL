@@ -31,4 +31,7 @@
    
 ### 관련코드   
    
-[1. case 별 클래스와 인스턴스 생성](https://github.com/chap95/TIL/blob/master/src/anotherFunction/createPerformanceCalculator.ts)
+[1. case 별 클래스와 인스턴스 생성](https://github.com/chap95/TIL/blob/master/src/anotherFunction/createPerformanceCalculator.ts)   
+[2. performance calculator 클래스](https://github.com/chap95/TIL/blob/master/src/class/performanceCalculator.ts)   
+   
+
