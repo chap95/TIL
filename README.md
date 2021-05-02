@@ -15,3 +15,4 @@
 ### [3. 반복문 쪼개기](https://github.com/chap95/TIL/blob/master/totalVolumeCredits.md)
 ### [4. 중첩함수 분리하기](https://github.com/chap95/TIL/blob/master/renderPlainText.md)   
 ### [5. 단계 분리하기](https://github.com/chap95/TIL/blob/master/htmlStatement.md)   
+### [6. 조건부 로직을 다형성으로 바꾸기](https://github.com/chap95/TIL/blob/master/createPerformanceCalculator.md)   
