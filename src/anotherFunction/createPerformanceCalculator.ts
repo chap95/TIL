@@ -9,6 +9,12 @@ import { INewPerformance } from "../renderPlainText";
 // 단점 : 메소드가 추가, 삭제 될 일이 많은 경우 모든 클래스를 수정해 줘야하는 단점이 있다.
 // 이런한 구조는 메소드가 추가 또는 삭제 될 일은 적으나 클래스가 추가 또는 삭제 될 일이 빈버한 경우 유용한 구조다.
 
+// 조건부 로직을 다형성으로 분리하는 작업을 할 코드
+// performanceCalculator 클래스를 선언하여 자식 클래스를 만들어 case 별로 대응
+// case가 추가 될 때마다 하나의 함수에서 복잡한 연산을 하는 방식에서 
+// case 분리만 아래의 함수에서 하고 복잡한 로직은 각각의 자식 클래스에서 하는 방식
+// 코드가 깔끔해지고 관심사도 분리할 수 있다.
+
 export function createPerformanceCalculator(aPerformace: INewPerformance, aPlay: IPlays){
   switch(aPlay.type){
     case PlayType.TRAGEDY:

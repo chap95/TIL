@@ -34,7 +34,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
   for (let perf of invoice.performances) {
     const play: IPlays = plays[perf.playID];
     let thisAmount = 0;
-
+    
     switch (play.type) {
       case PlayType.TRAGEDY: //비극
         thisAmount = 40000;
@@ -53,10 +53,7 @@ function statement(invoice: IInvoice, plays: IPlays) {
         throw new Error(`알 수 없는 장르 ${play}`);
     }
 
-    // 개인적인 궁금증 -> 왜 때무네 연극 종류로 가격을 계산하는지 이해가 안 감
-    // 비극은 눈물 나와서 휴지 값 받는 건가?
-
-    volumeCredits += Math.max(perf.audiance - 30, 0); //포인트 적립
+    volumeCredits += Math.max(perf.audiance - 30, 0);
     if (play.type === PlayType.COMEDY) {
       volumeCredits += Math.floor(perf.audiance / 5);
     }
