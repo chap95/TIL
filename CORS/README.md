@@ -24,4 +24,12 @@ port 는 생략이 가능하다. 그래서 protocol + host 와 같은 형태가 
 ### cross-origin
 
 본론으로 돌아와서 origin을 알아봤으니 cross-orign 이라는 말 뜻을 자세히 알아보자.
-단어적 의미는 교차 origin(?) 뭔가 서로 다른 origin 의미 같다.
+
+단어적 의미로 봤을 때 서로 다른 origin 의 자원 공유에 관한 문제라 예측이 된다.
+그렇다면 서로 다른 origin 이라 했을 때 어느 범위까지 같아야 같은 origin 취급을 할까?
+
+path와 query, fragment는 origin 판단에 영향을 주지 않는다. protocol ,host, port 이 셋 중 하나만 다르더라고 다른 origin으로 보게 된다.
+
+### SOP (same origin policy)
+
+보안을 위해서는 같은 origin 출처의 resource 만 사용는게 좋다. 그렇기 때문에 동일 출처 정책을 사용하는데 이를 사용하면 XSS 나 CSRF 공격을 막아내기 쉽다.
