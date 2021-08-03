@@ -30,6 +30,20 @@ port 는 생략이 가능하다. 그래서 protocol + host 와 같은 형태가 
 
 path와 query, fragment는 origin 판단에 영향을 주지 않는다. protocol ,host, port 이 셋 중 하나만 다르더라고 다른 origin으로 보게 된다.
 
+---
+
 ### SOP (same origin policy)
 
-보안을 위해서는 같은 origin 출처의 resource 만 사용는게 좋다. 그렇기 때문에 동일 출처 정책을 사용하는데 이를 사용하면 XSS 나 CSRF 공격을 막아내기 쉽다.
+보안을 위해서는 같은 origin 출처의 resource 만 사용는게 좋다. 그렇기 때문에 동일 출처 정책을 사용하는데 이를 사용하면 CSRF 공격을 막아내기 쉽다.
+
+하지만 이론상, 이상적으로 가능한 얘기다. 다른 origin 의 리소스를 사용하지 않고 웹페이지를 구성하는 것은 불가능하다.
+
+---
+
+### ACAO (Access Contril Allow Origin)
+
+SOP 를 통해 보안성을 높이는 점도 중요하다. 하지만 다른 origin의 리소스를 사용하지 못하는 것은 인터넷의 취지와 부합하지 않는다. 구더기 무서워서 된장 못 담그는 격이다.
+
+SOP를 지키지 않고 다른 origin의 리소스를 사용하기 위한 정책이 CORS 라고 할 수 있다.
+
+그러면 CORS는 어떻게 동작할까?
