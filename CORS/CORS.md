@@ -9,8 +9,11 @@ cross-origin 이라는 말은 의미가 와닿지 않는다.
 ### origin
 
 우선 origin 이라는 단어의 뜻을 먼저 알아보자.
+
 origin은 URL의 구조를 의미한다.
+
 URL은 아래와 같은 구조를 가지고 있다.
+
 ![url URL구성](cors_URL.png)  
 여기서 origin은 protocol + host + port 이다.  
 F12 를 눌러 console 에 window.origin 을 찍어보면 확인 할 수 있다.  
