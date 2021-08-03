@@ -1,3 +1,4 @@
 /.vscode
 tsconfig.json
 package.json
+.DS_Store
