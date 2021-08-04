@@ -73,3 +73,52 @@ Access-Control-Allow-Origin: https://normal-website.com
 ```
 
 다른 부분은 생략했고 ACAO 부분이 request 를 보낸 도메인과 일치한다. 그렇기 때문에 브라우저는 normal-website.com 에서 실행되는 코드가 response 에 접근할 수 있게 허가한다.
+
+ACAO 는 3가지 형태로 정의할 수 있다. 여러 개의 origin 과 null 그리고 와일드카드 (\*) 형태이다.
+
+하지만 브라우저는 여러 개의 origin 을 지원하지 않고 와일드 카드 사용은 제약이 있다.
+
+---
+
+### with credentials (자격증명 or 인증관련)
+
+with credential 은 어떤 의미를 가지고 있을끼?  
+바로 자격증명 관련 통신을 의미한다.
+기본적인 CORS 요청은 with credential 옵션이 빠져있다.  
+하지만 로그인과 같은 자격증명이나 인증과 관련된 통신을 할 때는 with credential 이 필수적이다.
+
+자격증명 통신을 할 때는 http header에 withCredentials 를 true로 넘겨주어야 한다.
+
+그러면 reponse 가 다음과 같이온다.
+
+```
+HTTP/1.1 200 OK
+...
+Access-Control-Allow-Origin: https://normal-website.com
+Access-Control-Allow-Credentials: true
+```
+
+withCredentials 과 관련된 통신은 Access-Control-Allow-Credentilas 이 reponse에 담겨오게 되는데 이 속성의 값이 true 이면 브라우저는 해당 reponse 를 읽어들인다.
+
+---
+
+### wildcards (와일드 카드 \*)
+
+위에서 와일드 카드에 대한 언급이 있었다.  
+origin 관련해서 와일드 카드는 모든 사이트를 의미한다. ACAO는 다른 origin 중 특정 사이트만 access 를 가능하게 만들지만 와일드 카드를 사용하면 모든 사이트에 대한 access를 허용한다.
+
+그렇기 때문에 withCredentials 가 true 일 때는 와일드 카드가 허용되지 않는다.
+
+```
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Credentials: true
+```
+
+위와 같은 reponse 가 오면 브라우저는 reponse를 읽지 않는다. 이유는 간단하다.
+withCredentials 가 true 라는 의미는 현재 통신이 보안과 관련된 통신이라는 의미인데 이러한 통신에서 모든 사이트에 대한 access 를 허가한다는 것은 모든 사이트에 cookie 와 같은 보안적인 요소를 허가한다는 의미와 다를게 없기 때문이다.
+
+와일드 카드는 와일드 카드만 쓰여야지 다른 value 와 섞이게 되면 유효하지 않게 되는 점도 기억해야한다.
+
+---
+
+### preflight
