@@ -122,3 +122,38 @@ withCredentials 가 true 라는 의미는 현재 통신이 보안과 관련된 �
 ---
 
 ### preflight
+
+CORS 가 허가한 확장된 request의 옵션으로 부터 기존의 리소스를 보호하기 위해서 CORS 스펙에는 pre-flight 기능이 추가됐다.
+
+CORS 요청에도 일정한 규격만 지키면 preflight 를 발생시키지 않는데 일정한 규격, 즉 일반적인 요청은 다음과 같다.
+
+```
+- GET, HEAD, POST
+- Request Header에 포함가능한 목록
+  -> Accept
+  -> Accept-Language
+  -> Content-Language
+  -> Content-Type ---> {
+        application/x-www-form-urlencoded
+        mutipart/form-data
+        text/plain
+      }
+
+```
+
+<br />
+위와 같은 사항들이 request 에 포함될 수 있고 그 외 나머지가 포함된 경우는
+    
+<br />
+
+```
+method = OPTIONS
+```
+
+형태로 preflight 가 전송된다.
+
+OPTIONS 요청을 받은 서버는 Response header에 허용할 옵션들을 기술하여 프론트로 전달해주고 브라우저는 Response header 에 기술된 목록을 통해 프론트 서버가 요청할 것들이 허용되는 검사한다.
+
+만약 허용되지 않는다면 405 Method not Allowed 를 발생시키도 원래 요청은 전송하지 않는다.
+
+그렇지 않고 허용되는 요청이면 원래 요청을 전송하게 된다.
