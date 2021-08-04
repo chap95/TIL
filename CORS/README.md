@@ -40,10 +40,36 @@ path와 query, fragment는 origin 판단에 영향을 주지 않는다. protocol
 
 ---
 
-### ACAO (Access Contril Allow Origin)
+### ACAO (Access Control Allow Origin)
 
 SOP 를 통해 보안성을 높이는 점도 중요하다. 하지만 다른 origin의 리소스를 사용하지 못하는 것은 인터넷의 취지와 부합하지 않는다. 구더기 무서워서 된장 못 담그는 격이다.
 
 SOP를 지키지 않고 다른 origin의 리소스를 사용하기 위한 정책이 CORS 라고 할 수 있다.
 
 그러면 CORS는 어떻게 동작할까?
+CORS 프로토콜은 HTTP 헤더에 포함된 속성으로 신뢰할 수 있는 origin 인지 접근이 허가 됐는지 확인한다.
+
+이 속성을 Access Control Allow Origin 이라고 하며 request 에 대한 respond header에 포함이 된다.
+
+웹 브라우저는 ACAO 와 request를 보낸 웹 사이트의 origin 을 비교하고 그 둘이 일치한다면 접근을 허가한다.
+
+```
+GET /data HTTP/1.1
+Host: robust-website.com
+Origin : https://normal-website.com
+```
+
+위는 normal-website.com 도메인을 가진 사이트에서 request 를 보낸예시이다.
+
+GET 방식으로 http1.1을 사용했으며 request의 목적지는 robust-website.com이 된다.
+
+그럼 reponse 를 보자
+
+```
+HTTP/1.1 200 OK
+...
+Access-Control-Allow-Origin: https://normal-website.com
+
+```
+
+다른 부분은 생략했고 ACAO 부분이 request 를 보낸 도메인과 일치한다. 그렇기 때문에 브라우저는 normal-website.com 에서 실행되는 코드가 response 에 접근할 수 있게 허가한다.
