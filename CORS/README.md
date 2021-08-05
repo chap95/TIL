@@ -150,10 +150,42 @@ CORS 요청에도 일정한 규격만 지키면 preflight 를 발생시키지 �
 method = OPTIONS
 ```
 
-형태로 preflight 가 전송된다.
+형태로 preflight 가 전송되고
 
-OPTIONS 요청을 받은 서버는 Response header에 허용할 옵션들을 기술하여 프론트로 전달해주고 브라우저는 Response header 에 기술된 목록을 통해 프론트 서버가 요청할 것들이 허용되는 검사한다.
+preflight의 reponse 에는 다음과 같은 속성들이 온다.
+
+```
+HTTP/1.1 204 No Content
+...
+Access-Control-Allow-Origin: https://normal-website.com
+Access-Control-Allow-Methods: PUT, POST, OPTIONS
+Access-Control-Allow-Headers: Special-Request-Header
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 240
+```
+
+위의 response 는 다음과 같이 해석 될 수 있다.
+
+```
+1. cross-origin의 withCredentials = true 요청이 허용된다.
+2. 허용되는 method 는 PUT,POST,OPTIONS 이다.
+3. 현재 preflight response는 4분 (240초) 동안 캐싱된다.
+(4. Special-Request-Header 는 어떤 의미인지 스터디
+해서 업데이트 하겠습니다 ㅜ)
+```
+
+OPTIONS 요청을 받은 서버는 Response header에 허용할 옵션들을 기술하여 프론트로 전달해주고 브라우저는 Response header 에 기술된 목록을 통해 request가 허용되는지 검사한다.
 
 만약 허용되지 않는다면 405 Method not Allowed 를 발생시키도 원래 요청은 전송하지 않는다.
 
 그렇지 않고 허용되는 요청이면 원래 요청을 전송하게 된다.
+
+---
+
+### 결론
+
+CORS 가 CSRF 공격에 취약하다고 생각하는 것은 오산이라고 한다.
+CORS 가 SOP 의 예외지만 위에 나온 설정들만 잘 해준다면 위험하지 않다고 한다.
+
+더군다나 CSRF 공격을 하는 방법은 여러가지며 꼭 CORS 뿐 아니라
+HTML form 이나 cross-domain resource를 통해 공격하는 방법이 있다고 한다.
