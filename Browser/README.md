@@ -14,3 +14,9 @@
 3. layout process
    render tree 구성이 끝나면 render tree를 기반으로 한 layout process 단계다. 여기서 layout 이란 renderer 가 tree 에 추가되었을 때는 위치나 size 를 알 수 없다. 그래서 이 값들을 계산하는 과정을 layout 또는 reflow 이다. layout은 각각의 node 들에게 해당 위치를 알려주는 의미를 가진다.
    render의 기본 좌표는 (0,0) 이며 이 위치는 viewport 이다. 모든 renderer 는 layout 또는 reflow 라는 메소드를 가지고 있는데 이는 레이아웃이 필요한 모든 자식 태그에게 layout 메소드를 호출한다.
+4. painting
+   이 단계에서는 render tree 가 순회되면서 renderer 는 paint() 라는 메소드를 호출하게 된다. paint() 메소드를 통해 화면에 보여지는 내용을 그리게 되며 이 프로세스는 UIBackEndlayer 에서 담당한다.
+
+   ***
+
+   랜더링 엔진은 사용자 경험을 위해 HTML 파싱을 기다리지 않고 render tree 구성 및 레이아웃을 시작한다. 또한 네트워크로 부터 내용을 지속적으로 받으면서 네트워크로 온 내용을 기다리지 않고 오는대로 파싱하고 render 한다.
