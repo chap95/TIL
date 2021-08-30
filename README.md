@@ -4,4 +4,10 @@
 
 ---
 
-1. CORS
+### 1. CORS
+
+### 2. TimeZone
+
+### 3. Browser
+
+### 4. Cookie
