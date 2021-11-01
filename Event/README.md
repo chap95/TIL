@@ -15,8 +15,42 @@
 
 위 설명을 본다면 이벤트를 전파하는 행위자체는 좋지 못한것 처럼 보인다. 하지만 대단하신 개발자 분들이 쓸데없이 만들어 놓지 않았겠지 라는 생각을 하면서 찾아본 결과 `Event Delegation` 이라는 단어를 쉽게 만날 수 있었다.
 
-사실 이벤트 전파(캡처와 버블링)는 `Event Delegation(이벤트 위임)` 을 사용하기 위한 초석이라고 해도 된다.
+사실 이벤트 전파(캡처와 버블링)는 `Event Delegation(이벤트 위임)` 을 사용하기 위한 초석이라해도 무방하다.
 
 ---
 
 ### Event Delegation
+
+이벤트 위임이 어떤 효용성을 가지고 있는지 예시를 통해서 한 번 알아보자
+
+```html
+<h1>TODO</h1>
+
+<div>
+  <input type="checkbox" name="js" />
+  <label>JS 공부하기</label>
+</div>
+
+<div>
+  <input type="checkbox" name="ts" />
+  <label>TS 공부하기</label>
+</div>
+
+<div>
+  <input type="checkbox" name="react" />
+  <label>React 공부하기</label>
+</div>
+
+<script>
+  let inputs = document.querySelectorAll("input");
+  inputs.forEach((input) => {
+    input.addEventListener("click", (e) => {
+      alert(e.currentTarget.name);
+    });
+  });
+</script>
+```
+
+위와 같이 간단한 TODO 가 있다고 가정해보자 각각의 input에 클릭 이벤트리스너를 달아줬다. 이 이벤트는 정확히 `input` 을 클릭해야만 발생합니다.
+
+하지만 우리가 대체적으로 사용하는 웹 서비스는 `input` 뿐 아니라 `label` 영역 더 나아가 `div` 영역 어디를 클릭해도 체크가 되면서 이벤트가 발생해야합니다.

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>TODO</h1>
+
+    <div>
+      <input type="checkbox" name="js" />
+      <label>JS 공부하기</label>
+    </div>
+
+    <div>
+      <input type="checkbox" name="ts" />
+      <label>TS 공부하기</label>
+    </div>
+
+    <div>
+      <input type="checkbox" name="react" />
+      <label>React 공부하기</label>
+    </div>
+
+    <script>
+      let inputs = document.querySelectorAll("input");
+      inputs.forEach((input) => {
+        input.addEventListener("click", (e) => {
+          alert(e.currentTarget.name);
+        });
+      });
+    </script>
+  </body>
+</html>
