@@ -125,3 +125,54 @@ function checkInput(node) {
 실제로 위에서 작성한 코드를 실행시켜 보면 `clickedTag` 에 대한 값은 클릭한 요소에 따라서 변하지만 `clickedCurrentTag` 에 대한 값은 항상 `ul` 로 고정이다.
 
 스크립트 초반부에 `.itemList(ul)` 에 이벤트 핸들러를 부여했으므로 이벤트가 발생한 요소로 부터 `버블링` 현상이 발생해 이벤트가 할당된 요소를 찾는 것이 아닌가 하는 생각이든다.
+
+---
+
+### Event.preventDefault
+
+위에서는 이벤트 위임의 효용성과 이벤트 전파를 컨트롤 할 수 있는 방법에 대해 알아보았다.
+
+`stopPropagation()` 이라는 메소드를 통해서 이벤트 전파에 대해 컨트롤 할 수 있었다. 하지만 `stopPropagation()`은 이벤트만 막아줄 뿐 클릭했을 때의 동작까지는 컨트롤 할 수 없다.
+
+다음의 예시를 참고해보자
+
+```html
+<body>
+  <a href="https://www.naver.com" target="_blank">
+    <div class="box">
+      <p>네이버 방문하기</p>
+      <div class="checkBox"></div>
+    </div>
+  </a>
+
+  <script>
+    let checkBox = document.querySelector(".checkBox");
+    checkBox.addEventListener("click", (e) => {
+      let classList = e.target.className;
+      if (classList.indexOf("--isChecked") === -1) {
+        e.target.classList.add("--isChecked");
+      } else {
+        e.target.classList.remove("--isChecked");
+      }
+    });
+  </script>
+</body>
+```
+
+> 코드의 가독성 때문에 style 은 제외
+
+위 코드는 `box` 를 `a` 태그로 감싸서 클릭하면 naver 로 새창을 띄운다. 그런데 해당 `box` 안에 `checkBox` 가 있어 해당 요소를 체크할 수 있다.
+
+우리가 웹 서비스에서 이러한 UI 를 보게되면 `box` 에 `a` 태그가 존재해도 `checkBox` 를 클릭하면 해당 요소만 클릭이 되어야한다. 하지만 위 예시는 naver 로 새창을 띄움과 동시에 `checkBox` 가 클릭이 된다.
+
+처음에 이러한 UI 를 구현할 때 `stopPropagation` 으로 이벤트를 막으면 될 줄 알았지만 소용이 없었다.
+
+`stopPropagation` 은 이벤트만 막아주는 로직이어서 아래와 같은 동작들은 막아 줄 수 없다고 한다.
+
+> a 태그
+> submit 태그
+
+이러한 태그들은 `preventDefault` 를 통해서 동작을 막아줘야한다.
+
+`stopPropagation`이 이벤트만 막아주고 동작을 막아주지 못 하는 것처럼
+`preventDefault`는 동작을 막아주고 이벤트는 그대로 전파해 준다는 특징을 가지고 있다.

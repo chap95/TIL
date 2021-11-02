@@ -46,6 +46,7 @@
     <script>
       let checkBox = document.querySelector(".checkBox");
       checkBox.addEventListener("click", (e) => {
+        e.preventDefault();
         let classList = e.target.className;
         if (classList.indexOf("--isChecked") === -1) {
           e.target.classList.add("--isChecked");
