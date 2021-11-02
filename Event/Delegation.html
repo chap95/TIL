@@ -4,32 +4,54 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+
+    <style>
+      li::marker {
+        font-size: 20px;
+      }
+    </style>
   </head>
   <body>
     <h1>TODO</h1>
 
-    <div>
-      <input type="checkbox" name="js" />
-      <label>JS 공부하기</label>
-    </div>
+    <ul class="todoList">
+      <li>
+        <input type="checkbox" name="js" id="item1" />
+        <label for="item1">JS 공부하기</label>
+      </li>
 
-    <div>
-      <input type="checkbox" name="ts" />
-      <label>TS 공부하기</label>
-    </div>
+      <li>
+        <input type="checkbox" name="ts" id="item2" />
+        <label for="item2">TS 공부하기</label>
+      </li>
 
-    <div>
-      <input type="checkbox" name="react" />
-      <label>React 공부하기</label>
-    </div>
+      <li>
+        <input type="checkbox" name="react" id="item3" />
+        <label for="item3">React 공부하기</label>
+      </li>
+    </ul>
 
     <script>
-      let inputs = document.querySelectorAll("input");
-      inputs.forEach((input) => {
-        input.addEventListener("click", (e) => {
-          alert(e.currentTarget.name);
+      let todoList = document.querySelector(".todoList");
+      todoList.addEventListener("click", (e) => {
+        let clickedTag = e.target.tagName.toLowerCase();
+        let clickedCurrentTag = e.currentTarget.tagName.toLowerCase();
+        console.log("clickedTag => ", clickedTag);
+        console.log("clickedCurrentTag => ", clickedCurrentTag);
+        let inputChildNode;
+        e.target.childNodes.forEach((node) => {
+          if (node.tagName === "INPUT") {
+            inputChildNode = node;
+          }
         });
+
+        if (inputChildNode) checkInput(inputChildNode);
       });
+
+      function checkInput(node) {
+        console.log("checkInput!");
+        node.checked = !node.checked;
+      }
     </script>
   </body>
 </html>
