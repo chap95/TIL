@@ -43,10 +43,9 @@ async function fetchPackage(reference) {
   return await response.buffer();
 }
 ```
-위와 같은 형태는 `fetchPackage` 의 기본형태이다. 하지만 위 함수는 `reference` 의 URL이 정확해야지만 package를 찾을 수 있다. 하지만 우리가 사용하는 `package.json` 을 가보면 
-`"react": "^15.5.4"` 이와 같이 버전이 범위로 표현된 경우를 볼 수 있다. 이런 형태로는 package를 찾지 못한다. package 이름과 버전을 넘겨주면 package의 URL을 return 해주는 함수로 변경해야한다. 
+위와 같은 형태는 `fetchPackage` 의 기본형태이다. 하지만 위 함수는 `reference` 의 URL이 정확해야지만 package를 찾을 수 있다. 그렇다면 패키지 이름과 버전 정보만으로 URL을 얻을 수는 없을까?
 
-그래서 범위 버전에 대응이 가능한 코드를 구현해야 하는데 `^X.X.X` 와 같은 형태에 맞는 정규표현식을 구현하는 것은 어려운 일이다. 이 때 `semver` 라는 모듈을 사용하면 좋다. `semver` 은 sementicVersion의 줄임 말 이다. `Major.Minor.Patch` 의미를 가진다. 한 번 위 모듈을 이용해서 패키지를 찾는 로직을 구현해보자.
+이 구현에서는 `x.x.x` 와 같은 형태를 찾아주는 `semver` 라이브러리를 사용한다. 
 
 ```ts
 import semver from 'semver';
@@ -101,3 +100,34 @@ async function fetchPackage({ name, reference }) {
 2. `semver` 를 이용해서 `refernce` 인자가 package의 URL 인지 확인한다. 
 
 3. 그러면 node의 fetch 함수가 동작하면서 package를 project 내부로 다운로드를 받는다.
+
+이제 패키지 이름과 버전으로 URL을 찾을 수 있는 함수를 만들었다. 그런데 이 함수에는 한 가지 단점이 존재한다. 그건 바로 범위 형태로 표현된 버전에 대해서는 URL 정보를 찾을 수 없다는거다. 
+
+그러면 범위 형태의 버전정보로도 URL을 찾을 수 있게 변경해보자
+이 때에도 `semver` 라이브러리를 사용한다.
+
+```ts
+import semver from 'semver';
+
+async function getPinnedReference({ name, reference }) {
+  if (semver.validRange(reference) && !semver.valid(reference)) {
+    let response = await fetch(`https://registry.yarnpkg.com/${name}`);
+    let info = await response.json();
+
+    let versions = Object.keys(info.versions);
+    let maxSatisfying = semver.maxSatisfying(versions, reference);
+
+    if (maxSatisfying === null)
+      throw new Error(
+        `Couldn't find a version matching "${reference}" for package "${name}"`
+      );
+
+    reference = maxSatisfying;
+  }
+
+  return { name, reference };
+}
+```
+
+`semver` 라이브러리를 통해서 버전 범위가 알맞은지 확인하고 버전자체가 valid 하지 않다면 fetch를 통해서 package를 받아 온 후에 가장 범위 내에서 가장 최신버전을 받아오게 된다. 그리고 `return` 문을 보면 형태가 `fetchPackage`의 파라미터와 동일하기 때문에 위에서 만들었던 함수인 `fetchPackage` 에 전달하면 package가 fetch 된다.
+
