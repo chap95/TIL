@@ -19,3 +19,85 @@ npm은 환경은 3가지로 뚜렷하게 분리가 되어있다.
 npm CLI : npm 명령어 인터페이스인데 수많은 명령어를 통해서 npm관련 동작을 수행할 수 있다. 대표적인 예시로 `npm install`을 들 수 있다.
 
 the registry : npm이 패키지를 이름과 버전으로 찾기 위해서 registry를 이용한다. registry는 패키지 정보를 찾기위해서 `CommonJS Package Registry` 를 사용한다.
+
+## Yarn
+
+Yarn은 NPM의 몇몇 문제점을 개선해서 등장했는데 Yarn 또한 NPM 과 비슷한 구조를 가지고 있다.
+
+- @yarnpkg/core
+- @yarnpkg/cli
+
+이 두 가지의 역할은 적지만 현재 디렉토리에 프로젝트 인스턴스를 hydrate 하고 미리 빌드되 Yarn Plugin을 환경에 주입하는 중요한 역할이 있다.
+
+나는 조금 호기심 더 생겨 Yarn의 코드에 대해서 찾아보았다.
+yarn은 `fetchPackage` 라는 함수를 가지고 있는데 이에 대한 설명을 해주는 글을 발견했고 이에 대해 정리해 보았다.
+
+```ts
+import fetch from 'node-fetch';
+
+async function fetchPackage(reference) {
+  let response = await fetch(reference);
+
+  if (!response.ok) throw new Error(`Couldn't fetch package "${reference}"`);
+
+  return await response.buffer();
+}
+```
+위와 같은 형태는 `fetchPackage` 의 기본형태이다. 하지만 위 함수는 `reference` 의 URL이 정확해야지만 package를 찾을 수 있다. 하지만 우리가 사용하는 `package.json` 을 가보면 
+`"react": "^15.5.4"` 이와 같이 버전이 범위로 표현된 경우를 볼 수 있다. 이런 형태로는 package를 찾지 못한다. package 이름과 버전을 넘겨주면 package의 URL을 return 해주는 함수로 변경해야한다. 
+
+그래서 범위 버전에 대응이 가능한 코드를 구현해야 하는데 `^X.X.X` 와 같은 형태에 맞는 정규표현식을 구현하는 것은 어려운 일이다. 이 때 `semver` 라는 모듈을 사용하면 좋다. `semver` 은 sementicVersion의 줄임 말 이다. `Major.Minor.Patch` 의미를 가진다. 한 번 위 모듈을 이용해서 패키지를 찾는 로직을 구현해보자.
+
+```ts
+import semver from 'semver';
+
+async function fetchPackage({ name, reference }) {
+  if (semver.valid(reference))
+    return await fetchPackage({
+      name,
+      reference: `https://registry.yarnpkg.com/${name}/-/${name}-${reference}.tgz`,
+    });
+
+  let response = await fetch(reference);
+
+  if (!response.ok) throw new Error(`Couldn't fetch package "${reference}"`);
+
+  return await response.buffer();
+}
+```
+
+첫 번쨰 코드와 차이점은 함수의 인자가 변경되었단 점이다. `reference` 라는 변수에 URL을 전달해주던 첫 번째 방식과 달리 package의 이름과 버전을 넘겨줌으로써 package를 찾을 수 있다.
+
+이 다음에는 `file-system`에 기반해서 패키지를 resolution 하는 로직을 추가해야한다. 외부에서 찾아 올 수 있지만 이미 다운로드 받아서 캐싱이 되었거나 이미 깔려 있는 package가 있을 수 있다.
+
+이 떄는 `fs` 를 이용한다. 파일의 URL이 `/`,`./`,`../` 로 시작하는지 확인하는 방법으로 로직을 전개한다.
+```ts
+import semver from 'semver';
+import fs from 'fs-extra';
+
+async function fetchPackage({ name, reference }) {
+  if ([`/`, `./`, `../`].some(prefix => reference.startsWith(prefix)))
+    return await fs.readFile(reference);
+
+  if (semver.valid(reference))
+    return await fetchPackage({
+      name,
+      reference: `https://registry.yarnpkg.com/${name}/-/${name}-${reference}.tgz`,
+    });
+
+  let response = await fetch(reference);
+
+  if (!response.ok) throw new Error(`Couldn't fetch package "${reference}"`);
+
+  return await response.buffer();
+}
+```
+
+위와 같은 형태로 구성이 가능하다. 그러면 `fetchPackage` 함수의 동작을 3단계로 나눠서 표현해보자
+
+1. 패키지의 references가 file-system에 있는지 확인한다.
+ `/`,`./`,`../` 문자열로 확인
+
+2. `semver` 를 이용해서 `refernce` 인자가 package의 URL 인지 확인한다. 
+
+3. 그러면 node의 fetch 함수가 동작하면서 package를 project 내부로 다운로드를 받는다.
