@@ -129,5 +129,27 @@ async function getPinnedReference({ name, reference }) {
 }
 ```
 
-`semver` 라이브러리를 통해서 버전 범위가 알맞은지 확인하고 버전자체가 valid 하지 않다면 fetch를 통해서 package를 받아 온 후에 가장 범위 내에서 가장 최신버전을 받아오게 된다. 그리고 `return` 문을 보면 형태가 `fetchPackage`의 파라미터와 동일하기 때문에 위에서 만들었던 함수인 `fetchPackage` 에 전달하면 package가 fetch 된다.
+`semver` 라이브러리를 통해서 버전 범위가 알맞은지 확인하고 버전자체가 valid 하지 않다면 fetch를 통해서 package를 받아 온 후에 범위 내에서 가장 최신버전을 받아오게 된다. 그리고 `return` 문을 보면 형태가 `fetchPackage`의 파라미터와 동일하기 때문에 위에서 만들었던 함수인 `fetchPackage` 에 전달하면 package가 fetch 된다.
 
+이제 범위로 표기된 `package` 도 문제 없이 설치할 수 있다. 하지만 이 `package` 들도 다른 `package` 로 구성되어 있다는 사실을 잊어서는 안된다. 다행히도 `package` 의 `package` 목록들은 `package.json` 에 표시가 잘 되어있다. 위에서 언급했듯이 모든 `package` 는 `package.json` 파일을 가지고 있기에 해당 `package` 를 fetch 하게 되면 해당 `package` 에 대한 `package.json`을 받을 수 있다. 이를 기반으로 `package`의 `package` 즉 `dependencies` 를 fetch 해보자
+
+```ts
+import { readPackageJsonFromArchive } from './utilities';
+
+async function getPackageDependencies({ name, reference }) {
+  let packageBuffer = await fetchPackage({ name, reference });
+  // 위에서 만들었던 fetchPackage 함수를 이용해서 해당 package를 받아온다.
+  let packageJson = JSON.parse(await readPackageJsonFromArchive(packageBuffer));
+  // readPackageJsonFromArchive 함수를 이용해서 패키지 내부에 있는 package.json 파일을 읽고 파싱한다.
+
+  
+  let dependencies = packageJson.dependencies || {};
+  // dependencies 목록을 구성
+
+  return Object.keys(dependencies).map(name => {
+    return { name, reference: dependencies[name] };
+  });
+  // 배열 형태로 dependencies의 이름과 버전 또는 URL을 내보낸다.
+  // 이를 다시 fetchPackage 함수를 이용해서 받아올 수 있다.
+}
+```
